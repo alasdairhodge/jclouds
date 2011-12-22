@@ -448,14 +448,15 @@ public class CloudSigmaClientLiveTest {
       drive = client.cloneDrive(bootDrive, drive.getName(),
             new CloneDriveOptions()
             .size(driveSize)
+            .affinity(AffinityType.SSD)
             .tags("cat:mouse", "monkey:banana")
       );
-      // Block until the async clone operation has completed.
+      // Block until the drive is available.
       assert driveNotClaimed.apply(drive) : client.getDriveInfo(drive.getUuid());
       
       DriveInfo clonedDrive = client.getDriveInfo(drive.getUuid());
       System.err.println("after prepare" + clonedDrive);
-      assertEquals(clonedDrive.getTags(), ImmutableSet.of("cat:mouse", "monkey:banana"));
+      assertEquals(clonedDrive.getTags(), ImmutableSet.of("cat:mouse", "monkey:banana", "affinity:ssd"));
    }
 
 }
